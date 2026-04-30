@@ -18,7 +18,7 @@ DECLARE @ID INT;
 SET @ID = COALESCE((SELECT MAX(ID) FROM dbo.TableName), 0) + 1
 
 INSERT INTO [dbName].[dbo].[TableName]
-   (ID,
+      (ID,
        DATE_FIELD,
        CHANGE_TYPE,
        ACCT_NO,
