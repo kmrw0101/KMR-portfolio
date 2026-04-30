@@ -1,4 +1,4 @@
-# Portfolio - Kerry Ritterbusch
+# Kerry Ritterbusch - QA Data Engineer
 
 ## About
 QA Lead with 15 years of experience in data validation, ETL/ELT testing, and quality assurance across financial services and healthcare industries. This repository contains SQL examples demonstrating the techniques and patterns I use in my day-to-day work.
