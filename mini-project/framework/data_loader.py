@@ -6,9 +6,11 @@ Supports:
 - CSV → list[dict]
 - JSON → dict or list
 - SQLite → list[dict] from a table
+- Generic loader → automatically selects CSV or JSON based on file extension
 
 All file paths are resolved relative to a base data directory.
 """
+
 
 import csv
 import json
