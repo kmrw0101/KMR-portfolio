@@ -1,0 +1,16 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.swp
+.pytest_cache/
+
+# Virtual environments
+.env/
+.venv/
+venv/
+
+# IDE files
+.vscode/
+.idea/
