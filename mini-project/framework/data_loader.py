@@ -1,14 +1,15 @@
 """
 data_loader.py
-Unified data loading utility for the Data QA Automation Framework.
+-----------------------------------------
+Data QA Automation Framework — Data Loader
+-----------------------------------------
 
-Supports:
-- CSV → list[dict]
-- JSON → dict or list
-- SQLite → list[dict] from a table
+Responsibilities:
+- Load CSV files into list[dict]
+- Load JSON files into Python objects
+- Load SQLite tables into list[dict]
 - Generic loader → automatically selects CSV or JSON based on file extension
-
-All file paths are resolved relative to a base data directory.
+- Resolve all file paths relative to the data directory
 """
 
 
