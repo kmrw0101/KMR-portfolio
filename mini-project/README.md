@@ -1,145 +1,115 @@
-Mini Project: Monster Data Validation
-Overview
-This project is part of my ongoing learning in SQL, Python, data validation, and QA automation.
-I built a small framework that compares data from a simulated pipeline (SQLite) against a “golden truth” CSV file. The goal is to practice:
+# Mini Project: Monster Data Validation
 
-validating data quality
+## Overview
 
-detecting differences
+This is a **SQL portfolio project** demonstrating data validation, ETL testing, and QA automation.
 
-writing automated tests
+The project compares actual data outputs (from a simulated data pipeline) against a golden truth CSV file to identify discrepancies and validate data quality.
 
-organizing Python modules
+## Project Structure
 
-understanding how data pipelines can be tested
-
-I’m still learning many of the tools used here, but everything in this project reflects real progress in my QA and data engineering skills.
-
-Project Structure
-Code
+```
 mini-project/
-├── framework/              # Core validation framework (Python modules I'm learning to build)
-│   ├── data_loader.py     # Loads data from SQLite & CSV
+├── framework/              # Core validation framework
+│   ├── data_loader.py     # Load data from SQLite & CSV
 │   ├── validators.py      # Validation & comparison logic
-│   ├── api_client.py      # Placeholder for future learning
-│   ├── config.py          # Placeholder for configuration experiments
-│   └── __init__.py
+│   ├── api_client.py      # (Reserved for future API integration)
+│   ├── config.py          # (Reserved for configuration)
+│   └── __init__.py        # Package initialization
 │
-├── tests/                  # Pytest test suites (I'm learning how these work)
-│   ├── test_monsters_perfect.py
-│   ├── test_monsters_diffs.py
-│   └── __init__.py
+├── tests/                  # Test suites
+│   ├── test_monsters_perfect.py   # Tests for GOOD data
+│   ├── test_monsters_diffs.py     # Tests for BAD data (should find diffs)
+│   └── __init__.py        # Package initialization
 │
-├── data/
-│   ├── actual/            # Simulated pipeline outputs
-│   └── expected/          # Golden truth CSV
+├── data/                   # Test datasets
+│   ├── actual/            # Data output from pipeline
+│   │   ├── monsters.sqlite       # ✓ GOOD (pipeline succeeded)
+│   │   └── monsters_bad.sqlite   # ✗ BAD (pipeline broken)
+│   │
+│   └── expected/          # Golden truth (answer key)
+│       └── monsters.csv         # Reference data
 │
-├── basic_python_exercises.py   # My Python practice file
-├── .gitignore
-└── README.md
-Framework Components
-DataLoader (framework/data_loader.py)
-What I’m learning here:
+├── basic_python_exercises.py     # Python practice exercises
+├── .gitignore            # Git ignore rules
+└── README.md             # This file
+```
 
-how to load data from SQLite
+## Framework Components
 
-how to read CSV files
+### DataLoader (`framework/data_loader.py`)
 
-how to return structured Python objects
+Handles loading data from multiple sources:
+- SQLite databases
+- CSV files
+- Data transformation and normalization
 
-how to organize code into modules
+### Validators (`framework/validators.py`)
 
-Validators (framework/validators.py)
-What I’m practicing:
+Core validation logic:
+- Row-level comparisons
+- Column-level validation
+- Difference detection and reporting
+- Data type checking
 
-comparing rows and columns
+## Test Suites
 
-checking for differences
+### test_monsters_perfect.py
 
-thinking like a QA engineer in Python
+Validates the GOOD dataset:
+- Loads `monsters.sqlite` (successful pipeline output)
+- Compares against `monsters.csv` (golden truth)
+- **Expected outcome:** All tests pass ✓
 
-building reusable validation functions
+### test_monsters_diffs.py
 
-Test Suites
-test_monsters_perfect.py
-This test checks the GOOD dataset:
+Validates the BAD dataset:
+- Loads `monsters_bad.sqlite` (broken pipeline output)
+- Compares against `monsters.csv` (golden truth)
+- Identifies and logs all discrepancies
+- **Expected outcome:** Tests find differences ⚠️
 
-loads monsters.sqlite
+## Running Tests
 
-compares it to monsters.csv
-
-expected result: all tests pass
-
-I’m learning how pytest discovers and runs tests.
-
-test_monsters_diffs.py
-This test checks the BAD dataset:
-
-loads monsters_bad.sqlite
-
-compares it to monsters.csv
-
-expected result: differences are found
-
-This helps me understand how validation failures are reported.
-
-Running Tests (with learning notes)
-bash
+```bash
 # Run all tests
 pytest tests/
-This runs every test in the project.
 
-bash
-# Run a specific test file
+# Run specific test suite
 pytest tests/test_monsters_perfect.py
-Useful when I only want to check one dataset.
+pytest tests/test_monsters_diffs.py
 
-bash
-# Run with verbose output (shows each test name)
+# Run with verbose output
 pytest tests/ -v
-I didn’t know what “verbose” meant at first — it just prints more detail.
 
-bash
-# Run with coverage (shows which files the tests executed)
+# Run with coverage
 pytest tests/ --cov=framework
-I’m still learning how to interpret coverage reports, but this command works.
+```
 
-Running Python Exercises
-bash
+## Running Python Exercises
+
+```bash
 python basic_python_exercises.py
-This file is where I practice Python syntax, functions, loops, and other basics.
+```
 
-Skills I’m Practicing
-Data validation & ETL testing
+## Skills Demonstrated
 
-SQLite querying
+- ✓ Data validation & ETL testing
+- ✓ SQLite database querying
+- ✓ CSV file processing
+- ✓ Pytest test framework
+- ✓ Python development practices
+- ✓ Data quality assurance
+- ✓ Error detection & reporting
 
-CSV processing
+## Future Enhancements
 
-Python modules and functions
+- [ ] API integration (`api_client.py`)
+- [ ] Configuration management (`config.py`)
+- [ ] Data transformation pipelines
+- [ ] SQL query validation
+- [ ] Performance benchmarking
 
-Pytest basics
+## Notes
 
-Organizing code into a small framework
-
-Thinking through QA logic in Python
-
-Detecting and reporting data differences
-
-Future Enhancements (learning goals)
-[ ] Build an API client (api_client.py)
-
-[ ] Add configuration management (config.py)
-
-[ ] Add more data transformation steps
-
-[ ] Validate SQL queries
-
-[ ] Add performance tests
-
-[ ] Improve error reporting
-
-Notes
-This project is part of my SQL and Python learning journey.
-I’m using it to practice real QA concepts in a small, controlled environment.
-As I learn more, I plan to expand the framework and add more validation rules.
+This project is part of a **SQL portfolio** showcasing QA and data validation expertise. The test framework can be extended to support additional data sources and validation rules.
