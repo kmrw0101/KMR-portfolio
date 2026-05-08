@@ -1,47 +1,86 @@
 """
 validators.py
-Core validation utilities for the Data QA Automation Framework.
-Provides row‑level and dataset‑level comparison functions for detecting
-missing records, extra records, mismatched values, schema differences,
-nulls, duplicates, and other data quality issues.
+-----------------------------------------
+Data QA Automation Framework — Validators
+-----------------------------------------
+
+Responsibilities:
+- Detect missing rows
+- Detect extra rows
+- Compare mismatched values
+- Validate schema differences
+- Identify null or empty values
+- Identify duplicate rows
+- Provide a unified validation entry point via `validate()`
 """
 
+from typing import List, Dict, Any
+
+
 class Validator:
-    def __init__(self, key_field=None):
-        """
-        key_field: Optional field name used to uniquely identify rows.
+    """
+    Validation engine for comparing expected vs actual datasets.
+
+    Parameters
+    ----------
+    key_field : str or None
+        Optional field name used to uniquely identify rows.
         If None, full-row comparison is used.
-        """
+    """
+
+    def __init__(self, key_field: str | None = None):
         self.key_field = key_field
 
     # ---------------------------------------------------------
-    # Find missing rows (in expected but not in actual)
+    # Missing rows (expected but not actual)
     # ---------------------------------------------------------
-    def find_missing_rows(self, expected, actual):
+    def find_missing_rows(
+        self,
+        expected: List[Dict[str, Any]],
+        actual: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Return rows that appear in expected but not in actual."""
         if self.key_field:
             actual_keys = {row[self.key_field] for row in actual}
             return [row for row in expected if row[self.key_field] not in actual_keys]
         else:
-            return [row for row in expected if row not in actual]
+            actual_set = {tuple(sorted(row.items())) for row in actual}
+            return [
+                row for row in expected
+                if tuple(sorted(row.items())) not in actual_set
+            ]
 
     # ---------------------------------------------------------
-    # Find extra rows (in actual but not in expected)
+    # Extra rows (actual but not expected)
     # ---------------------------------------------------------
-    def find_extra_rows(self, expected, actual):
+    def find_extra_rows(
+        self,
+        expected: List[Dict[str, Any]],
+        actual: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Return rows that appear in actual but not in expected."""
         if self.key_field:
             expected_keys = {row[self.key_field] for row in expected}
             return [row for row in actual if row[self.key_field] not in expected_keys]
         else:
-            return [row for row in actual if row not in expected]
+            expected_set = {tuple(sorted(row.items())) for row in expected}
+            return [
+                row for row in actual
+                if tuple(sorted(row.items())) not in expected_set
+            ]
 
     # ---------------------------------------------------------
-    # Find mismatched values for matching keys
+    # Mismatched values for matching keys
     # ---------------------------------------------------------
-    def find_mismatched_values(self, expected, actual):
+    def find_mismatched_values(
+        self,
+        expected: List[Dict[str, Any]],
+        actual: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Return field-level mismatches for rows with matching keys."""
         if not self.key_field:
-            return []  # cannot compare values without a key
+            return []
 
-        # Build lookup tables
         expected_map = {row[self.key_field]: row for row in expected}
         actual_map = {row[self.key_field]: row for row in actual}
 
@@ -49,33 +88,33 @@ class Validator:
 
         for key, exp_row in expected_map.items():
             if key not in actual_map:
-                continue  # handled by missing rows
+                continue
 
             act_row = actual_map[key]
 
-            # Compare each field
             for field in exp_row:
-                if field not in act_row:
+                exp_val = exp_row[field]
+                act_val = act_row.get(field)
+
+                if exp_val != act_val:
                     mismatches.append({
                         "key": key,
                         "field": field,
-                        "expected": exp_row[field],
-                        "actual": None
-                    })
-                elif exp_row[field] != act_row[field]:
-                    mismatches.append({
-                        "key": key,
-                        "field": field,
-                        "expected": exp_row[field],
-                        "actual": act_row[field]
+                        "expected": exp_val,
+                        "actual": act_val
                     })
 
         return mismatches
 
     # ---------------------------------------------------------
-    # Validate schema differences
+    # Schema validation
     # ---------------------------------------------------------
-    def validate_schema(self, expected, actual):
+    def validate_schema(
+        self,
+        expected: List[Dict[str, Any]],
+        actual: List[Dict[str, Any]]
+    ) -> Dict[str, List[str]]:
+        """Return missing and extra columns between expected and actual."""
         if not expected or not actual:
             return {"missing_columns": [], "extra_columns": []}
 
@@ -83,14 +122,15 @@ class Validator:
         actual_cols = set(actual[0].keys())
 
         return {
-            "missing_columns": sorted(list(expected_cols - actual_cols)),
-            "extra_columns": sorted(list(actual_cols - expected_cols)),
+            "missing_columns": sorted(expected_cols - actual_cols),
+            "extra_columns": sorted(actual_cols - expected_cols),
         }
 
     # ---------------------------------------------------------
-    # Check for null or empty values
+    # Null checks
     # ---------------------------------------------------------
-    def check_nulls(self, rows):
+    def check_nulls(self, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Return rows containing null or empty values."""
         nulls = []
         for idx, row in enumerate(rows):
             for field, value in row.items():
@@ -103,9 +143,10 @@ class Validator:
         return nulls
 
     # ---------------------------------------------------------
-    # Check for duplicate rows
+    # Duplicate checks
     # ---------------------------------------------------------
-    def check_duplicates(self, rows):
+    def check_duplicates(self, rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Return rows that appear more than once."""
         seen = set()
         duplicates = []
 
@@ -113,7 +154,7 @@ class Validator:
             if self.key_field:
                 key = row[self.key_field]
             else:
-                key = tuple(sorted(row.items()))  # full-row uniqueness
+                key = tuple(sorted(row.items()))
 
             if key in seen:
                 duplicates.append(row)
@@ -123,12 +164,14 @@ class Validator:
         return duplicates
 
     # ---------------------------------------------------------
-    # MAIN VALIDATION ENTRY POINT
+    # Main validation entry point
     # ---------------------------------------------------------
-    def validate(self, expected, actual):
-        """
-        Run all validation checks and return a structured result object.
-        """
+    def validate(
+        self,
+        expected: List[Dict[str, Any]],
+        actual: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """Run all validation checks and return a structured result object."""
         result = {
             "missing_rows": self.find_missing_rows(expected, actual),
             "extra_rows": self.find_extra_rows(expected, actual),
@@ -138,7 +181,6 @@ class Validator:
             "duplicates": self.check_duplicates(actual),
         }
 
-        # Determine pass/fail
         result["passed"] = (
             not result["missing_rows"]
             and not result["extra_rows"]
