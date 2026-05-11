@@ -1,16 +1,3 @@
-# Python artifacts
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.swp
-.pytest_cache/
-
-# Virtual environments
-.env/
-.venv/
-venv/
-
-# IDE files
-.vscode/
-.idea/
+version https://git-lfs.github.com/spec/v1
+oid sha256:928180b97aaba6c448c34b23b29555a808bc1c03cb3b2db28a79d70db5919bfc
+size 147
