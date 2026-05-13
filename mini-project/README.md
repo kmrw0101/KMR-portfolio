@@ -7,6 +7,7 @@ This is a **SQL portfolio project** demonstrating data validation, ETL testing, 
 The project compares actual data outputs (from a simulated data pipeline) against a golden truth CSV file to identify discrepancies and validate data quality.
 
 ## Project Structure
+'''
 mini-project/
 ├── framework/                 # Core validation framework
 │   ├── data_loader.py         # Load data from SQLite & CSV
@@ -31,6 +32,7 @@ mini-project/
 ├── basic_python_exercises.py  # Python practice exercises
 ├── .gitignore                 # Git ignore rules
 └── README.md                  # This file
+'''
 ## Framework Components
 
 ### DataLoader (`framework/data_loader.py`)
