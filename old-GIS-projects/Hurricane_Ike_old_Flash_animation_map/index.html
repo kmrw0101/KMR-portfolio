@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Flash Project</title>
+    <script src="ruffle/ruffle.js"></script>
+</head>
+<body>
+    <h1>My Flash Project</h1>
+
+    <div id="flash-container">
+        <embed src="Real_Ike_RitterbuschComplete.swf" width="800" height="600">
+    </div>
+
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        window.addEventListener("load", () => {
+            const ruffle = window.RufflePlayer.newest();
+            const container = document.getElementById("flash-container");
+            const player = ruffle.createPlayer();
+            container.replaceWith(player);
+            player.load("Real_Ike_RitterbuschComplete.swf");
+        });
+    </script>
+</body>
+</html>
