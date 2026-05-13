@@ -3,7 +3,7 @@
 This project preserves a **Flash-based GIS animation** created in **2011** to visualize the path and impact of **Hurricane Ike (2008)**.  
 The animation was originally built in Adobe Flash as part of early geospatial visualization work, and has now been restored using **Ruffle**, a modern Flash emulator that allows legacy `.swf` files to run safely in any browser.
 
-This project is part of my **GIS portfolio archive**, showcasing early work in interactive mapping, temporal animation, and data‑driven geospatial storytelling.
+This project is part of my **GIS portfolio archive**, showcasing my work in interactive mapping, temporal animation, and data‑driven geospatial storytelling.
 
 ---
 
