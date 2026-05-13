@@ -4,12 +4,9 @@
   Purpose: Display the Rondo historical GIS poster (PDF)
            in-browser using a full-screen HTML wrapper.
   Project: KMR Portfolio – Historical GIS Collection
-  ============================================================
+============================================================
 -->
 
-<!-- --------------------------------------------------------
-     Imports / Metadata
---------------------------------------------------------- -->
 <!DOCTYPE html>
 <html>
 
@@ -18,9 +15,6 @@
   <title>Geocoding Historical Architecture and the Razing of Rondo</title>
 
   <style>
-    /* ------------------------------------------------------
-       Styles
-       ------------------------------------------------------ */
     html,
     body {
       margin: 0;
@@ -36,7 +30,8 @@
       height: 100%;
     }
 
-    embed {
+    embed,
+    object {
       width: 100%;
       height: 100%;
       border: none;
@@ -44,34 +39,24 @@
   </style>
 </head>
 
-<!-- --------------------------------------------------------
-     Main Content
---------------------------------------------------------- -->
-
 <body>
   <div class="wrapper">
     <object
-      data="https://github.com/kmrw0101/KMR-portfolio/raw/refs/heads/main/old-GIS-projects/The%20Razing%20of%20Rondo/Geocoding%20Historical%20Architecture%20and%20the%20Razing%20of%20Rondo.pdf"
-      type="application/pdf" width="100%" height="100%">
+      data="https://github.com/kmrw0101/KMR-portfolio/blob/main/old-GIS-projects/The%20Razing%20of%20Rondo/Geocoding%20Historical%20Architecture%20and%20the%20Razing%20of%20Rondo.pdf?raw=true"
+      type="application/pdf">
 
       <p>
         The PDF could not be displayed in your browser.
-        You can <a
-          href="https://github.com/kmrw0101/KMR-portfolio/raw/refs/heads/main/old-GIS-projects/The%20Razing%20of%20Rondo/Geocoding%20Historical%20Architecture%20and%20the%20Razing%20of%20Rondo.pdf"
+        You can
+        <a
+          href="https://github.com/kmrw0101/KMR-portfolio/blob/main/old-GIS-projects/The%20Razing%20of%20Rondo/Geocoding%20Historical%20Architecture%20and%20the%20Razing%20of%20Rondo.pdf?raw=true"
           target="_blank">
-          click here to download or view the file directly</a>.
+          click here to download or view the file directly
+        </a>.
       </p>
 
     </object>
   </div>
 </body>
-
-<!-- --------------------------------------------------------
-     Notes
-     - This HTML file is served via GitHub Pages.
-     - The PDF is large (120MB, Git LFS) so GitHub cannot
-       preview it directly; this wrapper bypasses that.
-     - Relative path assumes this file lives in /docs/.
---------------------------------------------------------- -->
 
 </html>
