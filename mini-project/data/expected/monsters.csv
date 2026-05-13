@@ -1,3 +1,7 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
-size 1
+id,name,type,armor_class,hit_points,biome,challenge_rating,size,alignment,notes
+1,Dire Wolf,beast,14,37,forest,1.0,large,unaligned,"Hunts in packs, highly territorial"
+2,Fire Drake,dragon,16,52,volcanic,3.0,large,chaotic neutral,Emits bursts of flame when threatened
+3,Marsh Ghoul,undead,12,22,swamp,2.0,medium,chaotic evil,Ambush predator lurking in bogs
+4,Crystal Stag,fey,15,40,arctic,2.0,large,neutral good,Antlers glow when magic is nearby
+5,Sandstrider Scorpion,beast,13,28,desert,1.0,medium,unaligned,"Venomous tail, burrows under dunes"
+6,Mirelurker Toad,beast,11,18,swamp,0.5,small,unaligned,"Sticky tongue attack, camouflages easily"
