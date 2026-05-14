@@ -78,4 +78,4 @@ class Validator:
     def find_missing_rows(self, expected, actual):
         if self.key_field:
             actual_keys = {row[self.key_field] for row in actual}
-            return [row for row in expected if row[self.key_field] not in actual
+            return [row for row in expected if row[self.key_field] not in actual_keys]
