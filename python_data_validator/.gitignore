@@ -1,3 +1,72 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:928180b97aaba6c448c34b23b29555a808bc1c03cb3b2db28a79d70db5919bfc
-size 147
+"""
+App: Python Data Validation Toolkit — Repository Cleanup Rules
+Purpose: Keep the project lightweight, portable, and free from machine‑specific
+clutter. This file prevents accidental commits of virtual environments, Python
+cache files, editor settings, and test artifacts. Each section includes notes
+to explain what it protects and why it matters.
+"""
+
+# ============================================================
+# PYTHON CACHE / BUILD ARTIFACTS
+# These files are auto‑generated whenever Python runs. They
+# change constantly and should never be committed.
+# ============================================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+
+# ============================================================
+# VIRTUAL ENVIRONMENTS
+# Your .venv folder is specific to your machine. Keeping it
+# out of Git prevents huge commits and dependency conflicts.
+# ============================================================
+.venv/
+venv/
+env/
+
+
+# ============================================================
+# VS CODE WORKSPACE FILES
+# These store editor preferences unique to your setup. They
+# don’t belong in the repo unless intentionally shared.
+# ============================================================
+.vscode/
+*.code-workspace
+
+
+# ============================================================
+# PYTEST / TEST ARTIFACTS
+# Pytest generates caches, coverage files, and HTML reports.
+# These are temporary and should not be version-controlled.
+# ============================================================
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+
+
+# ============================================================
+# JUPYTER NOTEBOOK CHECKPOINTS
+# If notebooks are ever used, these folders appear
+# automatically. They’re safe to ignore and regenerate.
+# ============================================================
+.ipynb_checkpoints/
+
+
+# ============================================================
+# OS-SPECIFIC JUNK FILES
+# macOS and Windows generate hidden metadata files. They
+# cause noisy diffs and should always be ignored.
+# ============================================================
+.DS_Store
+Thumbs.db
+
+
+# ============================================================
+# LOG FILES
+# Useful locally for debugging, but never commit logs.
+# ============================================================
+*.log

@@ -14,6 +14,9 @@ This test performs a full end‑to‑end validation of a dataset by:
 # Imports
 # ---------------------------------------------------------------------------
 
+import framework
+print("Using framework package from:", framework.__file__)
+
 from pathlib import Path
 from framework.data_loader import DataLoader
 from framework.validators import Validator
