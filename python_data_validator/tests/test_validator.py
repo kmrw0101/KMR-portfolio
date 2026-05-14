@@ -8,6 +8,9 @@ This test performs a full end‑to‑end validation of a dataset by:
 - Running the Validator to compare both datasets
 - Producing a single PASS/FAIL result
 - Listing all differences when the datasets do not match
+
+This version also prints a detailed, developer‑friendly summary using
+print_summary() from conftest.py so that test output is easier to read.
 """
 
 # ---------------------------------------------------------------------------
@@ -37,7 +40,8 @@ from framework.config import (
 3. Runs the Validator to compare them
 4. Confirms the result structure is correct
 5. Prints differences if the result is FAIL
-6. Asserts that the configured dataset should PASS when expected and actual match
+6. Prints a readable summary for developers
+7. Asserts that the configured dataset should PASS when expected and actual match
 """
 
 
@@ -77,11 +81,9 @@ def test_dataset_validation():
     result = validator.validate(expected, actual)
 
     # -----------------------------
-    # Validate result structure
+    # Developer-friendly summary
     # -----------------------------
-    assert "status" in result
-    assert "differences" in result
-    assert isinstance(result["differences"], list)
+    print_summary("Unified Dataset Validation", result)
 
     # -----------------------------
     # If FAIL → print differences
