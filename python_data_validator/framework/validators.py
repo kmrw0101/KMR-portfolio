@@ -164,31 +164,70 @@ class Validator:
         return duplicates
 
     # ---------------------------------------------------------
-    # Main validation entry point
+    # Main validation entry point (Unified Result)
     # ---------------------------------------------------------
     def validate(
         self,
         expected: List[Dict[str, Any]],
         actual: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """Run all validation checks and return a structured result object."""
-        result = {
-            "missing_rows": self.find_missing_rows(expected, actual),
-            "extra_rows": self.find_extra_rows(expected, actual),
-            "mismatched_values": self.find_mismatched_values(expected, actual),
-            "schema_differences": self.validate_schema(expected, actual),
-            "nulls": self.check_nulls(actual),
-            "duplicates": self.check_duplicates(actual),
+        """
+        Run all validation checks and return a unified result object:
+        {
+            "status": "PASS" | "FAIL",
+            "summary": {...},
+            "differences": [...]
+        }
+        """
+
+        # Raw diff buckets
+        missing_rows = self.find_missing_rows(expected, actual)
+        extra_rows = self.find_extra_rows(expected, actual)
+        mismatched_values = self.find_mismatched_values(expected, actual)
+        schema_diffs = self.validate_schema(expected, actual)
+        nulls = self.check_nulls(actual)
+        duplicates = self.check_duplicates(actual)
+
+        # Summary block
+        summary = {
+            "missing_rows": len(missing_rows),
+            "extra_rows": len(extra_rows),
+            "mismatched_values": len(mismatched_values),
+            "missing_columns": len(schema_diffs["missing_columns"]),
+            "extra_columns": len(schema_diffs["extra_columns"]),
+            "nulls": len(nulls),
+            "duplicates": len(duplicates),
         }
 
-        result["passed"] = (
-            not result["missing_rows"]
-            and not result["extra_rows"]
-            and not result["mismatched_values"]
-            and not result["schema_differences"]["missing_columns"]
-            and not result["schema_differences"]["extra_columns"]
-            and not result["nulls"]
-            and not result["duplicates"]
-        )
+        # Unified differences list
+        differences = []
 
-        return result
+        for row in missing_rows:
+            differences.append({"type": "missing_row", "row": row})
+
+        for row in extra_rows:
+            differences.append({"type": "extra_row", "row": row})
+
+        for mismatch in mismatched_values:
+            differences.append({"type": "mismatched_value", "detail": mismatch})
+
+        for col in schema_diffs["missing_columns"]:
+            differences.append({"type": "missing_column", "column": col})
+
+        for col in schema_diffs["extra_columns"]:
+            differences.append({"type": "extra_column", "column": col})
+
+        for item in nulls:
+            differences.append({"type": "null_value", "detail": item})
+
+        for row in duplicates:
+            differences.append({"type": "duplicate_row", "row": row})
+
+        # PASS/FAIL
+        status = "PASS" if len(differences) == 0 else "FAIL"
+
+        return {
+            "status": status,
+            "summary": summary,
+            "differences": differences
+        }
