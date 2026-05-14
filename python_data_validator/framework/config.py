@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
-size 1
+from pathlib import Path
+
+BASE_DATA_PATH = Path("python_data_validator/data")
+DEFAULT_ACTUAL_DB = "actual/monsters.sqlite"
+DEFAULT_EXPECTED_CSV = "expected/monsters.csv"
+DEFAULT_TABLE_NAME = "monsters"
