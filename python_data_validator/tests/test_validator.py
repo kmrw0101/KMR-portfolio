@@ -1,4 +1,5 @@
 """
+--> This file contains pytest tests for the validator. It is not used by the main application. Use if using pytest.
 Test: Unified Dataset Validation
 --------------------------------
 This test performs a full end‑to‑end validation of a dataset by:
