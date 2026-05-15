@@ -8,41 +8,28 @@ This test performs a full end‑to‑end validation of a dataset by:
 - Running the Validator to compare both datasets
 - Producing a single PASS/FAIL result
 - Listing all differences when the datasets do not match
+- Printing a developer‑friendly summary using print_summary() from conftest.py
 
-This version also prints a detailed, developer‑friendly summary using
-print_summary() from conftest.py so that test output is easier to read.
+This test verifies the entire workflow:
+file loading → validation → reporting.
 """
 
 # ---------------------------------------------------------------------------
 # Imports
 # ---------------------------------------------------------------------------
 
-import framework
-print("Using framework package from:", framework.__file__)
-
-from pathlib import Path
-from framework.data_loader import DataLoader
-from framework.validators import Validator
-from framework.config import (
+from python_data_validator.framework.data_loader import DataLoader
+from python_data_validator.framework.validators import Validator
+from python_data_validator.framework.config import (
     BASE_DATA_PATH,
     DEFAULT_ACTUAL_DB,
     DEFAULT_EXPECTED_CSV,
     DEFAULT_TABLE_NAME,
 )
 
-
-# ---------------------------------------------------------------------------
-# Notes: What this test covers
-# ---------------------------------------------------------------------------
-"""
-1. Ensures the expected and actual files exist
-2. Loads both datasets using the DataLoader
-3. Runs the Validator to compare them
-4. Confirms the result structure is correct
-5. Prints differences if the result is FAIL
-6. Prints a readable summary for developers
-7. Asserts that the configured dataset should PASS when expected and actual match
-"""
+# NOTE:
+# print_summary is NOT imported.
+# Pytest automatically loads it from conftest.py.
 
 
 # ---------------------------------------------------------------------------
@@ -81,7 +68,8 @@ def test_dataset_validation():
     result = validator.validate(expected, actual)
 
     # -----------------------------
-    # Developer-friendly summary
+    # Developer‑friendly summary
+    # (print_summary comes from conftest.py)
     # -----------------------------
     print_summary("Unified Dataset Validation", result)
 
@@ -90,7 +78,7 @@ def test_dataset_validation():
     # -----------------------------
     if result["status"] == "FAIL":
         print("\nDifferences found:")
-        for diff in result["differences"]:
+        for diff in result.get("differences", []):
             print(f"- {diff}")
 
     # -----------------------------

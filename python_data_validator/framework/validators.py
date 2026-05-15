@@ -32,15 +32,7 @@ class Validator:
         self.key_field = key_field
 
     # ---------------------------------------------------------
-    # VALUE NORMALIZATION (NEW)
-    # ---------------------------------------------------------
-    # Converts numeric-looking strings into real ints/floats so
-    # CSV and SQLite rows compare correctly.
-    #
-    # Examples:
-    #   "14"  -> 14
-    #   "1.0" -> 1.0
-    #   "forest" stays "forest"
+    # VALUE NORMALIZATION
     # ---------------------------------------------------------
 
     def normalize_value(self, value):
@@ -49,19 +41,16 @@ class Validator:
             return value
 
         if isinstance(value, str):
-            # Try converting to int
             try:
                 return int(value)
             except ValueError:
                 pass
 
-            # Try converting to float
             try:
                 return float(value)
             except ValueError:
                 pass
 
-            # Not numeric → keep as string
             return value
 
         return value
@@ -73,8 +62,7 @@ class Validator:
     # ---------------------------------------------------------
     # MISSING ROWS
     # ---------------------------------------------------------
-    # Rows that appear in expected but not in actual.
-    # ---------------------------------------------------------
+
     def find_missing_rows(self, expected, actual):
         if self.key_field:
             actual_keys = {row[self.key_field] for row in actual}
@@ -89,8 +77,7 @@ class Validator:
     # ---------------------------------------------------------
     # EXTRA ROWS
     # ---------------------------------------------------------
-    # Rows that appear in actual but not in expected.
-    # ---------------------------------------------------------
+
     def find_extra_rows(self, expected, actual):
         if self.key_field:
             expected_keys = {row[self.key_field] for row in expected}
@@ -105,8 +92,7 @@ class Validator:
     # ---------------------------------------------------------
     # MISMATCHED VALUES
     # ---------------------------------------------------------
-    # Field-level differences for rows with matching keys.
-    # ---------------------------------------------------------
+
     def find_mismatched_values(self, expected, actual):
         if not self.key_field:
             return []
@@ -139,8 +125,7 @@ class Validator:
     # ---------------------------------------------------------
     # SCHEMA VALIDATION
     # ---------------------------------------------------------
-    # Detects missing or extra columns.
-    # ---------------------------------------------------------
+
     def validate_schema(self, expected, actual):
         if not expected or not actual:
             return {"missing_columns": [], "extra_columns": []}
@@ -156,8 +141,7 @@ class Validator:
     # ---------------------------------------------------------
     # NULL CHECKS
     # ---------------------------------------------------------
-    # Identifies rows containing null or empty values.
-    # ---------------------------------------------------------
+
     def check_nulls(self, rows):
         nulls = []
         for idx, row in enumerate(rows):
@@ -173,8 +157,7 @@ class Validator:
     # ---------------------------------------------------------
     # DUPLICATE CHECKS
     # ---------------------------------------------------------
-    # Identifies rows that appear more than once.
-    # ---------------------------------------------------------
+
     def check_duplicates(self, rows):
         seen = set()
         duplicates = []
@@ -195,12 +178,18 @@ class Validator:
     # ---------------------------------------------------------
     # MAIN VALIDATION ENTRY POINT
     # ---------------------------------------------------------
-    # Returns:
-    #   - status: PASS or FAIL
-    #   - summary: counts of each issue type
-    #   - differences: detailed list of all issues
-    # ---------------------------------------------------------
+
     def validate(self, expected, actual):
+        """
+        Run all validation checks and return a fully structured result.
+
+        Returns
+        -------
+        dict with:
+            - status: PASS or FAIL
+            - summary: dict of counts for every check type
+            - differences: list of detailed issue descriptions
+        """
 
         # Normalize values BEFORE comparing
         expected = [self.normalize_row(r) for r in expected]
@@ -214,7 +203,7 @@ class Validator:
         nulls = self.check_nulls(actual)
         duplicates = self.check_duplicates(actual)
 
-        # Build summary
+        # Build summary (always include all categories)
         summary = {
             "missing_rows": len(missing_rows),
             "extra_rows": len(extra_rows),
@@ -250,7 +239,7 @@ class Validator:
             differences.append({"type": "duplicate_row", "row": row})
 
         # Final PASS/FAIL
-        status = "PASS" if len(differences) == 0 else "FAIL"
+        status = "PASS" if not differences else "FAIL"
 
         return {
             "status": status,
